@@ -53,7 +53,7 @@ class Cell:
             if side:
                 pygame.draw.line(surface, WHITE, self.edges[index][0], self.edges[index][1], 2)
 
-
+ccell = None
 def create_cells():
     cells = []
     for row in range(ROWS):
@@ -63,9 +63,11 @@ def create_cells():
     return cells
 
 
+cells = []  # initialize cells as a global variable
+
 def reset_game_state():
     global cells, game_over, turn, players, player, next_turn, fill_count, p1_score, p2_score
-    cells = create_cells()
+    cells = create_cells()  # initialize cells
     game_over = False
     turn = 0
     players = ['X', 'O']
@@ -75,18 +77,12 @@ def reset_game_state():
     p1_score = 0
     p2_score = 0
 
-
 def handle_input_events():
-    global game_over, next_turn
+    global game_over, next_turn, ccell
+    up = right = bottom = left = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = event.pos
-
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = None
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
@@ -115,11 +111,21 @@ def handle_input_events():
             if event.key == pygame.K_LEFT:
                 left = False
 
-    return True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:  # Right mouse button
+                mouse_pos = pygame.mouse.get_pos()
+                for cell in cells:
+                    if cell.rect.collidepoint(mouse_pos):
+                        ccell = cell
+                        break
+        # Minimize the window
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+            pygame.display.iconify()
+    return up, right, bottom, left
 
 
-def update_game_state():
-    global next_turn, fill_count, p1_score, p2_score
+def update_game_state(up, right, bottom, left):
+    global next_turn, fill_count, p1_score, p2_score, ccell, player, turn
     if ccell:
         index = ccell.index
         if not ccell.winner:
@@ -130,16 +136,19 @@ def update_game_state():
             if index - ROWS >= 0:
                 cells[index - ROWS].sides[2] = True
                 next_turn = True
+
         if right and not ccell.sides[1]:
             ccell.sides[1] = True
             if (index + 1) % COLS > 0:
                 cells[index + 1].sides[3] = True
                 next_turn = True
+
         if bottom and not ccell.sides[2]:
             ccell.sides[2] = True
             if index + ROWS < len(cells):
                 cells[index + ROWS].sides[0] = True
                 next_turn = True
+
         if left and not ccell.sides[3]:
             ccell.sides[3] = True
             if (index % COLS) > 0:
@@ -162,8 +171,8 @@ def update_game_state():
             player = players[turn]
             next_turn = False
 
-
 def draw_game():
+    global cells, ccell  # access cells and ccell as global variables
     win.fill(BLACK)
     pygame.draw.rect(win, WHITE, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
 
@@ -173,6 +182,8 @@ def draw_game():
                                              r * CELL_SIZE + 3 * PADDING), 2)
 
     for cell in cells:
+        if cell == ccell:
+            pygame.draw.rect(win, RED, cell.rect, 2)  # Draw a border around the selected cell
         cell.update(win)
 
     if game_over:
@@ -189,3 +200,21 @@ def draw_game():
 
         msg = 'Press r:restart, q:'
 
+reset_game_state()  # call reset_game_state() before draw_game()
+draw_game()
+
+running = True
+while running:
+    up, right, bottom, left = handle_input_events()
+
+    # Update game state based on keyboard input
+    update_game_state(up, right, bottom, left)
+
+    # Draw the game
+    draw_game()
+
+    # Update the display
+    pygame.display.flip()
+
+    # Cap the frame rate
+    pygame.time.Clock().tick(60)
