@@ -13,9 +13,21 @@ BLACK = (12, 12, 12)
 
 # Initialize pygame
 pygame.init()
-win = pygame.display.set_mode(SCREEN_SIZE, pygame.NOFRAME)
+win = pygame.display.set_mode(SCREEN_SIZE)
 font = pygame.font.SysFont('cursive', 25)
 
+# Global variables
+cells = []
+game_over = False
+turn = 0
+players = ['X', 'O']
+player = players[turn]
+next_turn = False
+fill_count = 0
+p1_score = 0
+p2_score = 0
+ccell = None
+up = right = bottom = left = False
 
 class Cell:
     def __init__(self, row, col):
@@ -77,16 +89,10 @@ def reset_game_state():
 
 
 def handle_input_events():
-    global game_over, next_turn
+    global game_over, next_turn, up, right, bottom, left
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = event.pos
-
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = None
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
@@ -119,7 +125,7 @@ def handle_input_events():
 
 
 def update_game_state():
-    global next_turn, fill_count, p1_score, p2_score
+    global next_turn, fill_count, p1_score, p2_score, ccell
     if ccell:
         index = ccell.index
         if not ccell.winner:
@@ -189,3 +195,18 @@ def draw_game():
 
         msg = 'Press r:restart, q:'
 
+# Main game loop
+reset_game_state()
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    handle_input_events()
+    update_game_state()
+    draw_game()
+
+    pygame.display.update()
+
+pygame.quit()
