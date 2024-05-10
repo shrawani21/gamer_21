@@ -3,7 +3,8 @@ Dots &amp; Boxes
 
 **Dot and Boxes Game**
 
-![Dot and Boxes](https://example.com/dot-and-boxes-screenshot.png)
+![image](https://github.com/TonyStark-47/gamer_21/assets/73957207/a790f078-a87d-4e17-877c-f1d630de9a68)
+
 
 **Description:**
 Dot and Boxes is a classic pen-and-paper game where two players take turns connecting dots to form lines. When a player completes a box by forming the fourth side, they score a point and get another turn. The player with the most boxes at the end of the game wins.
