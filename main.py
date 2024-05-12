@@ -204,7 +204,6 @@ while running:
             else:  # Player 2's turn
                 pygame.draw.rect(win, BLUE, (p2_text_pos[0], p2_text_pos[1] + font.get_height() + 2, p2_text.get_width() + p2_img.get_width() + 5, 2), 0)
 
-
     if game_over:
         # Display game over message
         over_img = font.render('Game Over', True, WHITE)
