@@ -55,4 +55,8 @@ Dot and Boxes is a classic pen-and-paper game where two players take turns conne
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and ensure the tests pass.
 4. Submit a pull request for review.
+
+**License:**
+- This project is licensed under the MIT License - see the LICENSE file for details.
 ```
+
