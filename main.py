@@ -16,6 +16,18 @@ pygame.init()
 win = pygame.display.set_mode(SCREEN_SIZE, pygame.NOFRAME)  # Set up the game window
 font = pygame.font.SysFont('cursive', 25)  # Define a font for text rendering
 
+# Global variables
+cells = []
+game_over = False
+turn = 0
+players = ['X', 'O']
+player = players[turn]
+next_turn = False
+fill_count = 0
+p1_score = 0
+p2_score = 0
+ccell = None
+up = right = bottom = left = False
 
 class Cell:
     def __init__(self, row, col):
@@ -98,12 +110,6 @@ def handle_input_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = event.pos
-
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = None
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
@@ -223,4 +229,20 @@ def draw_game():
         win.blit(winner_img, (rect.centerx - winner_img.get_width() / 2, rect.centery - 10))
 
         # Display restart and quit instructions
-        msg = 'Press r:restart, q:'
+        msg = 'Press r:restart, q:quit'
+
+# Main game loop
+reset_game_state()
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    handle_input_events()
+    update_game_state()
+    draw_game()
+
+    pygame.display.update()
+
+pygame.quit()
