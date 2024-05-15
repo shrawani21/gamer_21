@@ -1,12 +1,12 @@
-# gamer_21
-Dots &amp; Boxes
+Here's the corrected and updated README.md:
 
-**Dot and Boxes Game**
+```markdown
+# Dot and Boxes Game
 
-![Dot and Boxes](https://example.com/dot-and-boxes-screenshot.png)
+![image](https://github.com/TonyStark-47/gamer_21/assets/73957207/a790f078-a87d-4e17-877c-f1d630de9a68)
 
 **Description:**
-Dot and Boxes is a classic pen-and-paper game where two players take turns to connect dots to form lines. When a player completes a box by forming the fourth side, they score a point and get another turn. The player with the most boxes at the end of the game wins.
+Dot and Boxes is a classic pen-and-paper game where two players take turns connecting dots to form lines. When a player completes a box by forming the fourth side, they score a point and get another turn. The player with the most boxes at the end of the game wins.
 
 **Features:**
 - **Single Player:** Play against an AI opponent with adjustable difficulty levels.
@@ -26,41 +26,33 @@ Dot and Boxes is a classic pen-and-paper game where two players take turns to co
 **Installation:**
 1. Clone the repository to your local machine:
    ```
-   git clone https://github.com/your-username/dot-and-boxes.git
+   git clone https://github.com/shrawani21/gamer_21.git
    ```
 2. Navigate to the project directory:
    ```
-   cd dot-and-boxes
+   cd gamer_21
    ```
-3. Install dependencies using npm or yarn:
+3. Install dependencies/requirements:
    ```
-   npm install
+   pip install -r requirements.txt
    ```
    or
    ```
-   yarn install
+   pip install pygame
    ```
-
-**Usage:**
-- Run the development server:
-  ```
-  npm start
-  ```
-  or
-  ```
-  yarn start
-  ```
-- Open your web browser and navigate to http://localhost:3000 to play the game.
+4. Run the Game:
+   ```
+   python main.py
+   ```
+   This will launch the game!
 
 **Credits:**
 - This project is based on the classic Dot and Boxes game.
-- Developed using React.js, HTML, and CSS.
+- Developed using Python only.
 
 **Contributing:**
 1. Fork the repository on GitHub.
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and ensure the tests pass.
 4. Submit a pull request for review.
-
-**License:**
-This project is licensed under the MIT License - see the LICENSE file for details.
+```
