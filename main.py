@@ -73,7 +73,7 @@ class Cell:
                 # Draw filled sides of the cell
                 pygame.draw.line(surface, WHITE, self.edges[index][0], self.edges[index][1], 2)
 
-
+ccell = None
 def create_cells():
     """
     Create a list of Cell objects to represent the game grid.
@@ -85,13 +85,12 @@ def create_cells():
             cells.append(cell)
     return cells
 
-
 def reset_game_state():
     """
     Reset the game state to its initial conditions.
     """
     global cells, game_over, turn, players, player, next_turn, fill_count, p1_score, p2_score
-    cells = create_cells()
+    cells = create_cells()  # initialize cells
     game_over = False
     turn = 0
     players = ['X', 'O']
@@ -101,12 +100,11 @@ def reset_game_state():
     p1_score = 0
     p2_score = 0
 
-
 def handle_input_events():
     """
     Handle user input events.
     """
-    global game_over, next_turn
+    global game_over, next_turn, ccell, up, right, bottom, left
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
@@ -138,14 +136,24 @@ def handle_input_events():
             if event.key == pygame.K_LEFT:
                 left = False
 
-    return True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:  # Right mouse button
+                mouse_pos = pygame.mouse.get_pos()
+                for cell in cells:
+                    if cell.rect.collidepoint(mouse_pos):
+                        ccell = cell
+                        break
 
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+            pygame.display.iconify()
+
+    return True
 
 def update_game_state():
     """
     Update the game state based on user input.
     """
-    global next_turn, fill_count, p1_score, p2_score
+    global next_turn, fill_count, p1_score, p2_score, player, turn
     if ccell:
         index = ccell.index
         if not ccell.winner:
@@ -158,18 +166,21 @@ def update_game_state():
             if index - ROWS >= 0:
                 cells[index - ROWS].sides[2] = True
                 next_turn = True
+
         if right and not ccell.sides[1]:
             # Similar for 'right' key
             ccell.sides[1] = True
             if (index + 1) % COLS > 0:
                 cells[index + 1].sides[3] = True
                 next_turn = True
+
         if bottom and not ccell.sides[2]:
             # Similar for 'bottom' key
             ccell.sides[2] = True
             if index + ROWS < len(cells):
                 cells[index + ROWS].sides[0] = True
                 next_turn = True
+
         if left and not ccell.sides[3]:
             # Similar for 'left' key
             ccell.sides[3] = True
@@ -195,7 +206,6 @@ def update_game_state():
             turn = (turn + 1) % len(players)
             player = players[turn]
             next_turn = False
-
 
 def draw_game():
     """
