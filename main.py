@@ -25,7 +25,6 @@ class Cell:
         self.row = row
         self.col = col
         self.index = self.row * ROWS + self.col
-
         # Create a rectangle representing the cell's area on the game window
         self.rect = pygame.Rect((self.col * CELL_SIZE + 2 * PADDING,
                                  self.row * CELL_SIZE + 3 * PADDING,
@@ -144,24 +143,29 @@ def update_game_state():
     if ccell:
         index = ccell.index
         if not ccell.winner:
+            # Draw red circle on current cell if it's not won
             pygame.draw.circle(win, RED, (ccell.rect.centerx, ccell.rect.centery), 2)
 
         if up and not ccell.sides[0]:
+            # If 'up' key is pressed and top side of cell is not drawn, draw it
             ccell.sides[0] = True
             if index - ROWS >= 0:
                 cells[index - ROWS].sides[2] = True
                 next_turn = True
         if right and not ccell.sides[1]:
+            # Similar for 'right' key
             ccell.sides[1] = True
             if (index + 1) % COLS > 0:
                 cells[index + 1].sides[3] = True
                 next_turn = True
         if bottom and not ccell.sides[2]:
+            # Similar for 'bottom' key
             ccell.sides[2] = True
             if index + ROWS < len(cells):
                 cells[index + ROWS].sides[0] = True
                 next_turn = True
         if left and not ccell.sides[3]:
+            # Similar for 'left' key
             ccell.sides[3] = True
             if (index % COLS) > 0:
                 cells[index - 1].sides[1] = True
@@ -169,16 +173,19 @@ def update_game_state():
 
         res = ccell.check_win(player)
         if res:
+            # Check if current cell has been won
             fill_count += res
             if player == 'X':
                 p1_score += 1
             else:
                 p2_score += 1
             if fill_count == ROWS * COLS:
+                # Check if all cells are filled
                 print(p1_score, p2_score)
                 game_over = True
 
         if next_turn:
+            # Switch player turn if next_turn is True
             turn = (turn + 1) % len(players)
             player = players[turn]
             next_turn = False
@@ -190,16 +197,18 @@ def draw_game():
     """
     win.fill(BLACK)  # Fill the game window with a black background
     pygame.draw.rect(win, WHITE, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)  # Draw the game border
-
+    # Draw grid lines
     for r in range(ROWS + 1):
         for c in range(COLS + 1):
             # Draw circles to represent intersection points
             pygame.draw.circle(win, WHITE, (c * CELL_SIZE + 2 * PADDING,
                                              r * CELL_SIZE + 3 * PADDING), 2)
 
+    # Update and draw each cell
     for cell in cells:
         cell.update(win)  # Update the visual representation of each cell
 
+    # Display game over message if game is over
     if game_over:
         # Draw a message indicating the game is over
         rect = pygame.Rect((50, 100, SCREEN_WIDTH - 100, SCREEN_HEIGHT - 200))
@@ -213,4 +222,5 @@ def draw_game():
         winner_img = font.render(f'Player {winner} Won', True, GREEN)
         win.blit(winner_img, (rect.centerx - winner_img.get_width() / 2, rect.centery - 10))
 
+        # Display restart and quit instructions
         msg = 'Press r:restart, q:'
