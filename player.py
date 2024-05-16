@@ -1,12 +1,15 @@
+# Importing required modules
 import random
 from box import Box
 from typing import List
 
-
+# Function to determine boxes affected by a line
 def line_boxes(mat, line) -> List[Box]:
+    # Extracting the endpoints of the line
     p1, p2 = line
     boxes = []
-    if p1[0] == p2[0]:  # horizontal
+    # Checking if the line is horizontal
+    if p1[0] == p2[0]:
         pos1 = min(p1, p2, key=lambda x: x[1])
         if pos1[0] > 0:
             box_top = mat[pos1[0] - 1][pos1[1]]
@@ -24,7 +27,7 @@ def line_boxes(mat, line) -> List[Box]:
             boxes.append(box_right)
     return boxes
 
-
+# Function to get surrounding boxes of a given box
 def get_boxes_around(box_mat, box: Box):
     boxes = {'top': None, 'bottom': None, 'left': None, 'right': None}
     if box.idx[0] > 0:
@@ -37,7 +40,7 @@ def get_boxes_around(box_mat, box: Box):
         boxes['right'] = box_mat[box.idx[0]][box.idx[1] + 1]
     return boxes
 
-
+# Function to count surrounding boxes of a given box
 def num_boxes_around(box_mat, box: Box):
     count = 0
     if box.idx[0] > 0:
@@ -50,7 +53,7 @@ def num_boxes_around(box_mat, box: Box):
         count += 1
     return count
 
-
+# Function to get an empty side of a box
 def get_empty(box):
     if box.top is None:
         return box.top_idx()
@@ -61,7 +64,7 @@ def get_empty(box):
     else:
         return box.right_idx()
 
-
+# Function to get a random empty side of a box, excluding a specific index
 def get_rand_empty(box, exclude=None):
     choices = []
     if box.top is None:
@@ -78,7 +81,7 @@ def get_rand_empty(box, exclude=None):
             choices.append(box.right_idx())
     return random.choice(choices)
 
-
+# Function to get the sides of surrounding boxes of a given box
 def get_sides_box(box_mat, box: Box):
     sides = {'top': None, 'bottom': None, 'left': None, 'right': None}
     if box.idx[0] > 0:
@@ -91,7 +94,7 @@ def get_sides_box(box_mat, box: Box):
         sides['right'] = box_mat[box.idx[0]][box.idx[1] + 1].sides
     return sides
 
-
+# Function to check if a box has less than a certain number of sides on a given side
 def less_than_sides(box_mat, box: Box, side, num):
     sides = get_sides_box(box_mat, box)[side]
     if side == 'top' and box.top is not None:
@@ -106,7 +109,7 @@ def less_than_sides(box_mat, box: Box, side, num):
         return True
     return sides < num
 
-
+# Function to check if a box is facing outward
 def facing_out(box_mat, box: Box):
     if box.idx[0] == 0 and box.top is None:
         return True
@@ -118,21 +121,18 @@ def facing_out(box_mat, box: Box):
         return True
     return False
 
-
+# Function to determine the AI's move in the game for the "easy" difficulty level
 def easy(box_mat, prev_line):
     if prev_line is not None:
         prev_boxes = line_boxes(box_mat, prev_line)
-
         for prev_box in prev_boxes:
             if prev_box.sides == 3:
                 return get_rand_empty(prev_box)
-
     boxes = Box.ALL_BOXES
     box0 = list(filter(lambda x: x.sides == 0, boxes))
     box1 = list(filter(lambda x: x.sides == 1, boxes))
     box2 = list(filter(lambda x: x.sides == 2, boxes))
     box3 = list(filter(lambda x: x.sides == 3, boxes))
-
     if box3:
         return get_rand_empty(random.choice(box3))
     if box0:
@@ -142,26 +142,21 @@ def easy(box_mat, prev_line):
     if box2:
         return get_rand_empty(random.choice(box2))
 
-
+# Function to determine the AI's move in the game for the "medium" difficulty level
 def medium(box_mat, prev_line):
     if prev_line is not None:
         prev_boxes = line_boxes(box_mat, prev_line)
-
         for prev_box in prev_boxes:
             if prev_box.sides == 3:
                 return get_rand_empty(prev_box)
-
     boxes = Box.ALL_BOXES
     box0 = list(filter(lambda x: x.sides == 0, boxes))
     box1 = list(filter(lambda x: x.sides == 1, boxes))
     box2 = list(filter(lambda x: x.sides == 2, boxes))
     box3 = list(filter(lambda x: x.sides == 3, boxes))
-
     box_less2 = box0 + box1
-
     if box3:
         return get_rand_empty(random.choice(box3))
-
     top = list(filter(lambda x: less_than_sides(box_mat, x, 'top', 2), box_less2))
     bottom = list(filter(lambda x: less_than_sides(box_mat, x, 'bottom', 2), box_less2))
     left = list(filter(lambda x: less_than_sides(box_mat, x, 'left', 2), box_less2))
@@ -173,7 +168,6 @@ def medium(box_mat, prev_line):
     choices.extend([i.right_idx() for i in right])
     if choices:
         return random.choice(choices)
-
     if box0:
         return get_rand_empty(random.choice(box0))
     if box1:
@@ -181,25 +175,20 @@ def medium(box_mat, prev_line):
     if box2:
         return get_rand_empty(random.choice(box2))
 
-
+# Function to determine the AI's move in the game for the "hard" difficulty level
 def hard(box_mat, prev_line):
     if prev_line is not None:
         prev_boxes = line_boxes(box_mat, prev_line)
-
         for prev_box in prev_boxes:
             if prev_box.sides == 3:
                 return get_rand_empty(prev_box)
-
     boxes = Box.ALL_BOXES
     box0 = list(filter(lambda x: x.sides == 0, boxes))
     box1 = list(filter(lambda x: x.sides == 1, boxes))
     box3 = list(filter(lambda x: x.sides == 3, boxes))
-
     if box3:
         return get_rand_empty(random.choice(box3))
-
     box_less2 = box0 + box1
-
     top = list(filter(lambda x: less_than_sides(box_mat, x, 'top', 2), box_less2))
     bottom = list(filter(lambda x: less_than_sides(box_mat, x, 'bottom', 2), box_less2))
     left = list(filter(lambda x: less_than_sides(box_mat, x, 'left', 2), box_less2))
@@ -211,7 +200,6 @@ def hard(box_mat, prev_line):
     choices.extend([i.right_idx() for i in right])
     if choices:
         return random.choice(choices)
-
     chains = []
     checked = []
     crosses = []
@@ -254,23 +242,18 @@ def hard(box_mat, prev_line):
             current = new
             new = []
         chains.append(chain)
-
     sorted_chains = sorted(chains, key=lambda x: len(x))
-
     if sorted_chains:
         return get_rand_empty(random.choice(sorted_chains[0]))
-
     return get_rand_empty(random.choice(crosses))
 
-
+# Function to determine the AI's move in the game for the "extreme" difficulty level
 def extreme(box_mat, prev_line):
     boxes = Box.ALL_BOXES
     box0 = list(filter(lambda x: x.sides == 0, boxes))
     box1 = list(filter(lambda x: x.sides == 1, boxes))
     box3 = list(filter(lambda x: x.sides == 3, boxes))
-
     box_less2 = box0 + box1
-
     top = list(filter(lambda x: less_than_sides(box_mat, x, 'top', 2), box_less2))
     bottom = list(filter(lambda x: less_than_sides(box_mat, x, 'bottom', 2), box_less2))
     left = list(filter(lambda x: less_than_sides(box_mat, x, 'left', 2), box_less2))
@@ -280,7 +263,6 @@ def extreme(box_mat, prev_line):
     choices.extend([i.bottom_idx() for i in bottom])
     choices.extend([i.left_idx() for i in left])
     choices.extend([i.right_idx() for i in right])
-
     chains = []
     checked = []
     crosses = []
@@ -323,12 +305,9 @@ def extreme(box_mat, prev_line):
             current = new
             new = []
         chains.append(chain)
-
     sorted_chains = sorted(chains, key=lambda x: len(x))
-
     if prev_line is not None:
         prev_boxes = line_boxes(box_mat, prev_line)
-
         for prev_box in prev_boxes:
             if prev_box.sides == 3:
                 side = get_rand_empty(prev_box)
@@ -340,7 +319,6 @@ def extreme(box_mat, prev_line):
                                 if num_boxes_around(box_mat, box) < 4 and facing_out(box_mat, box):
                                     return get_rand_empty(box, exclude=side)
                 return side
-
     if box3:
         b = random.choice(box3)
         side = get_rand_empty(b)
@@ -352,20 +330,13 @@ def extreme(box_mat, prev_line):
                         if num_boxes_around(box_mat, box) < 4 and facing_out(box_mat, box):
                             return get_rand_empty(box, exclude=side)
         return side
-
     if choices:
         return random.choice(choices)
-
     if sorted_chains:
         return get_rand_empty(random.choice(sorted_chains[0]))
-
     return get_rand_empty(random.choice(crosses))
 
-
-def expert(box_mat, prev_line):
-    pass  # coming soon
-
-
+# Class to represent a player in the game
 class Player:
     def __init__(self, player_type, color, difficulty=1):
         self.player_type = player_type
@@ -375,12 +346,12 @@ class Player:
         self.move = None
         self.difficulty = difficulty
 
+    # Method to get the player's move
     def get_move(self, box_mat, prev_line):
         if self.player_type == 'human':
             m = self.move
             self.move = None
             return m
-
         if self.difficulty == 1:
             return easy(box_mat, prev_line)
         elif self.difficulty == 2:
