@@ -1,0 +1,10 @@
+const specs = {
+    project: {
+      name: "Dot and Boxes",
+      defaultBranch: "main",
+      repoUrl: "https://github.com/shrawani21/gamer_21.git",
+    },
+    contributing: {
+      generate: true
+    }
+};
