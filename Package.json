@@ -1,15 +1,10 @@
-// Define project specifications
 const specs = {
-  project: {
-      // Name of the project
+    project: {
       name: "Dot and Boxes",
-      // Default branch of the repository
       defaultBranch: "main",
-      // URL of the GitHub repository
       repoUrl: "https://github.com/shrawani21/gamer_21.git",
-  },
-  contributing: {
-      // Flag indicating whether contributing guidelines should be generated
+    },
+    contributing: {
       generate: true
-  }
+    }
 };
