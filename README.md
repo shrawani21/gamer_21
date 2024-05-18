@@ -1,4 +1,3 @@
-```markdown
 # Dot and Boxes Game 🎮
 
 ![image](https://github.com/TonyStark-47/gamer_21/assets/73957207/a790f078-a87d-4e17-877c-f1d630de9a68)
