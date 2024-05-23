@@ -1,1 +1,4 @@
-pygame
+# General Requirements
+Platform Compatibility: The game should be compatible with Windows, macOS, and Linux.
+Python Version: The project should work with Python 3.8 or higher.
+Pygame Version: The project should use Pygame version 2.0 or higher.
