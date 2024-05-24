@@ -130,8 +130,59 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/shrawa
 include Setup of env, IDE and typical getting started instructions?
 
 -->
+To get started with your first code contribution, follow these steps:
 
+ 1. **Fork the Repository:** Go to the GitHub page of the project and fork the repository to your account.
+ 2. **Clone the Repository:** Clone your forked repository to your local machine using:
+ ```
+ git clone https://github.com/shrawani21/gamer_21.git
+```
+3. **Navigate to the Project Directory:**
+```
+cd gamer_21
+```
+4. **Install Dependencies:** Make sure you have node and npm installed. Install the required dependencies by running:
+```
+npm install
+```
+5. **Create a Branch:** Create a new branch to work on your contribution:
+```
+git checkout -b my-contribution
+```
+
+### Make Your Changes
+Now you're ready to make your changes to the codebase. Make sure to follow any relevant styleguides and coding conventions.
+### Test Your Changes
+Before submitting your contribution, make sure to test your changes thoroughly. Ensure that they work as expected and haven't introduced any errors.
+### Commit Your Changes
+Once you're satisfied with your changes, commit them to your branch:
+```
+git add .
+git commit -m "Add your commit message here"
+```
+### Push Your Changes
+Push your changes to your forked repository:
+```
+git push origin my-contribution
+```
+### Open A Pull Request
+Finally, open a pull request from your forked repository to the main repository. Provide a clear description of your changes and why they're necessary. The project admins review your contribution and merge it if everything looks good!
 ### Improving The Documentation
+Improving documentation is a valuable contribution to any project. To improve the documentation for Dots and Boxes, follow these steps:
+
+1. **Identify Areas for Improvement:** Look for sections of the documentation that are unclear, outdated, or missing important information.
+2. **Make Your Changes:** Make the necessary changes to the documentation files. Ensure that your changes are clear, concise, and follow any existing styleguides.
+3. **Test Your Changes:** After making your changes, test them to ensure that they accurately reflect the project and are helpful to users.
+4. **Commit Your Changes:** Commit your changes with a clear and descriptive commit message:
+```
+git add .
+git commit -m "Improve documentation: [brief description of changes]"
+```
+5. **Push Your Changes:** Push your changes to your forked repository:
+```
+git push origin my-documentation-improvements
+```
+6.**Open a Pull Request:** Open a pull request from your forked repository to the main repository. Provide a clear description of your changes and why they're necessary. The project admins will review your contribution and merge it if everything looks good!
 <!-- TODO
 Updating, improving and correcting the documentation
 
