@@ -200,8 +200,10 @@ while running:
     if not game_over:
         if turn == 0:  # Player 1's turn
             pygame.draw.rect(win, BLUE, (p1_text_pos[0], p1_text_pos[1] + font.get_height() + 2, p1_text.get_width() + p1_img.get_width() + 5, 2), 0)
+            cell_select_sound = pygame.mixer.Sound('C:/Users/Priya/OneDrive/Desktop/python/gamer_21/sound/interface-124464.mp3')
         else:  # Player 2's turn
             pygame.draw.rect(win, BLUE, (p2_text_pos[0], p2_text_pos[1] + font.get_height() + 2, p2_text.get_width() + p2_img.get_width() + 5, 2), 0)
+            cell_select_sound = pygame.mixer.Sound('C:/Users/Priya/OneDrive/Desktop/python/gamer_21/sound/interface-124464.mp3')
 
     if game_over:
         # Display game over message
