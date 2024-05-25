@@ -204,13 +204,17 @@ while running:
             pygame.draw.rect(win, BLUE, (p2_text_pos[0], p2_text_pos[1] + font.get_height() + 2, p2_text.get_width() + p2_img.get_width() + 5, 2), 0)
 
     if game_over:
-        # Display game over message
+        win.fill(BLACK)  # Filling the screen with a black background so the info's  gets clearly displayed
+
         over_img = font.render('Game Over', True, WHITE)
-        winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)
+        winner_text = f'Player {1 if p1_score > p2_score else 2} Won'
+        winner_img = font.render(winner_text, True, GREEN)
         msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)
+
         win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))
         win.blit(winner_img, ((SCREEN_WIDTH - winner_img.get_width()) / 2, 150))
         win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, 200))
+        pygame.display.flip()  
 
     # Draw border
     pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
