@@ -205,7 +205,11 @@ while running:
 
     if game_over:
         # Display game over message
-        over_img = font.render('Game Over', True, WHITE)
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        overlay.set_alpha(200) 
+        overlay.fill(BLACK)
+        win.blit(overlay, (0, 0))
+        over_img = font.render('Game Over', True,WHITE )
         winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)
         msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)
         win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))
