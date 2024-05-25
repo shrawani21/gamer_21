@@ -204,13 +204,28 @@ while running:
             pygame.draw.rect(win, BLUE, (p2_text_pos[0], p2_text_pos[1] + font.get_height() + 2, p2_text.get_width() + p2_img.get_width() + 5, 2), 0)
 
     if game_over:
-        # Display game over message
+        win.fill(BLACK)  # Filling the screen with a black background so the info gets clearly displayed
+
         over_img = font.render('Game Over', True, WHITE)
-        winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)
+        score_text = f'Player 1 : {p1_score}    Player 2 : {p2_score}'
+        winner_text = f'Player {1 if p1_score > p2_score else 2} Won'
+        score_img = font.render(score_text, True, BLUE)
+        winner_img = font.render(winner_text, True, GREEN)
         msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)
-        win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))
-        win.blit(winner_img, ((SCREEN_WIDTH - winner_img.get_width()) / 2, 150))
-        win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, 200))
+
+        # Calculate positions with increased spacing
+        over_y = 50
+        score_y = over_y + over_img.get_height() + 30
+        winner_y = score_y + score_img.get_height() + 30
+        msg_y = winner_y + winner_img.get_height() + 30
+
+        win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, over_y))
+        win.blit(score_img, ((SCREEN_WIDTH - score_img.get_width()) / 2, score_y))
+        win.blit(winner_img, ((SCREEN_WIDTH - winner_img.get_width()) / 2, winner_y))
+        win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, msg_y))
+        
+        pygame.display.flip()  # Update the display
+
 
     # Draw border
     pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
