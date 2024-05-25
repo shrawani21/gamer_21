@@ -4,7 +4,7 @@ import pygame
 SCREEN_WIDTH, SCREEN_HEIGHT = 300, 300
 CELL_SIZE = 40
 PADDING = 20
-ROWS = COLS = (SCREEN_WIDTH - 4 * PADDING) // CELL_SIZE
+ROWS = COLS = (SCREEN_WIDTH - 2 * PADDING) // CELL_SIZE
 
 # Colors
 WHITE = (255, 255, 255)
@@ -26,9 +26,9 @@ class Cell:
     def __init__(self, row, col):
         self.row = row
         self.col = col
-        self.index = self.row * ROWS + self.col
-        self.rect = pygame.Rect((self.col * CELL_SIZE + 2 * PADDING,
-                                 self.row * CELL_SIZE + 3 * PADDING,
+        self.index = self.row * COLS + self.col
+        self.rect = pygame.Rect((self.col * CELL_SIZE + PADDING,
+                                 self.row * CELL_SIZE + PADDING,
                                  CELL_SIZE, CELL_SIZE))
         self.edges = [
             [(self.rect.left, self.rect.top), (self.rect.right, self.rect.top)],
@@ -38,6 +38,8 @@ class Cell:
         ]
         self.sides = [False] * 4
         self.winner = None
+        self.color = None
+        self.text = None
 
     def check_win(self, winner):
         if not self.winner and all(self.sides):
@@ -50,7 +52,7 @@ class Cell:
     def update(self, win):
         if self.winner:
             pygame.draw.rect(win, self.color, self.rect)
-            win.blit(self.text, (self.rect.centerx - 5, self.rect.centery - 7))
+            win.blit(self.text, (self.rect.centerx - self.text.get_width() // 2, self.rect.centery - self.text.get_height() // 2))
 
         for index, side in enumerate(self.sides):
             if side:
@@ -124,7 +126,7 @@ while running:
     # Drawing grid
     for r in range(ROWS + 1):
         for c in range(COLS + 1):
-            pygame.draw.circle(win, WHITE, (c * CELL_SIZE + 2 * PADDING, r * CELL_SIZE + 3 * PADDING), 2)
+            pygame.draw.circle(win, WHITE, (c * CELL_SIZE + PADDING, r * CELL_SIZE + PADDING), 2)
 
     # Update and draw cells
     for cell in cells:
@@ -140,22 +142,22 @@ while running:
 
         if up and not current_cell.sides[0]:
             current_cell.sides[0] = True
-            if index - ROWS >= 0:
-                cells[index - ROWS].sides[2] = True
+            if index - COLS >= 0:
+                cells[index - COLS].sides[2] = True
                 next_turn = True
         if right and not current_cell.sides[1]:
             current_cell.sides[1] = True
-            if (index + 1) % COLS > 0:
+            if (index + 1) % COLS != 0:
                 cells[index + 1].sides[3] = True
                 next_turn = True
         if bottom and not current_cell.sides[2]:
             current_cell.sides[2] = True
-            if index + ROWS < len(cells):
-                cells[index + ROWS].sides[0] = True
+            if index + COLS < len(cells):
+                cells[index + COLS].sides[0] = True
                 next_turn = True
         if left and not current_cell.sides[3]:
             current_cell.sides[3] = True
-            if (index % COLS) > 0:
+            if index % COLS != 0:
                 cells[index - 1].sides[1] = True
                 next_turn = True
 
