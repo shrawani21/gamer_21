@@ -4,13 +4,13 @@
 Dot and Boxes is a classic pen-and-paper game where two players take turns connecting dots to form lines. When a player completes a box by forming the fourth side, they score a point and get another turn. The player with the most boxes at the end of the game wins.
 <br>
 <br>
-![image](images/display.png)
-
+![images](images/dotandgame.png)
 ## ✨ Features 
 - **Grid-based Gameplay:** The game consists of a grid where players take turns to draw lines between dots.
 <br>
 
-- **Two Players:** The game supports two players, either two human players taking turns.
+- **Two Players:** The game supports two players - either two human players taking turns or one human player against an AI.
+
 <br>
 
 - **Turn-based System:** The game alternates turns between the players unless a player completes a box, in which case they get an extra turn.
@@ -19,20 +19,14 @@ Dot and Boxes is a classic pen-and-paper game where two players take turns conne
 - **Score Tracking:** Keep track of each player's score throughout the game.
 <br>
 
+ **Single-player mode:**Play against a basic AI that makes random moves.
+
 
 ## 🎲 Instructions for Playing
-1. Player 1 is represented by 'X' and Player 2 is represented by 'O'.
 
-2. Use the arrow keys to draw lines:
+1. Player 1 is represented by 'X' (Blue) and Player 2 (or AI) is represented by 'O' (Green).
 
-   1. Up Arrow: Draw the top line of the selected cell.
-   
-   2. Right Arrow: Draw the right line of the selected cell.
-   3. Down Arrow: Draw the bottom line of the selected cell.
-   4. Left Arrow: Draw the left line of the selected cell.
-
-   or you can also use the mouse to select cells by clicking on them.
-
+2. Use the mouse to draw lines by clicking near the sides of the boxes.
 
 3. When a player completes the fourth side of a box, they earn a point and get an additional turn.
 
@@ -41,6 +35,20 @@ Dot and Boxes is a classic pen-and-paper game where two players take turns conne
 5. Press the 'R' key to restart the game at any time.
 
 6. Press 'Q' or the 'Escape' key to quit the game.
+
+## Steps to play
+
+ 1.Drawing Lines:
+Click near the top, right, bottom, or left side of a cell to draw the corresponding line.
+
+2.Completing Boxes:
+When you complete a box, it will be filled with your color (Blue for 'X', Red for 'O'), and you will get an additional turn.
+
+3.AI Moves:
+If playing in single-player mode, the AI will automatically make its move after your turn.
+
+4.Winning the Game:
+The game ends when all boxes are completed. The player with the most boxes wins.
 
 ## 💻 Installation 
 1. Clone the repository to your local machine:
