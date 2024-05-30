@@ -243,7 +243,7 @@ while running:
         
         # Draw replay and quit buttons
         draw_button(win, replay_button_rect, BLUE, 'Replay', WHITE)
-        draw_button(win, quit_button_rect, 'Quit', WHITE)
+        draw_button(win, quit_button_rect, RED, 'Quit', WHITE)
 
     # Draw border
     pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
