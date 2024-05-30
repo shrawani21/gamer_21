@@ -21,6 +21,7 @@ pygame.init()
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.SysFont('cursive', 25)
 
+
 class Cell:
     def __init__(self, row, col):
         self.row = row
@@ -35,7 +36,6 @@ class Cell:
             [(self.rect.right, self.rect.bottom), (self.rect.left, self.rect.bottom)],
             [(self.rect.left, self.rect.bottom), (self.rect.left, self.rect.top)]
         ]
-
         self.sides = [False] * 4
         self.winner = None
 
@@ -146,6 +146,46 @@ while running:
             # Always switch players after a mouse click
             turn = (turn + 1) % len(players)
             current_player = players[turn]
+=======
+            pygame.draw.circle(win, RED, current_cell.rect.center, 2)
+
+        if up and not current_cell.sides[0]:
+            current_cell.sides[0] = True
+            if index - ROWS >= 0:
+                cells[index - ROWS].sides[2] = True
+                next_turn = True
+        if right and not current_cell.sides[1]:
+            current_cell.sides[1] = True
+            if (index + 1) % COLS > 0:
+                cells[index + 1].sides[3] = True
+                next_turn = True
+        if bottom and not current_cell.sides[2]:
+            current_cell.sides[2] = True
+            if index + ROWS < len(cells):
+                cells[index + ROWS].sides[0] = True
+                next_turn = True
+        if left and not current_cell.sides[3]:
+            current_cell.sides[3] = True
+            if (index % COLS) > 0:
+                cells[index - 1].sides[1] = True
+                next_turn = True
+
+        # Check for win condition
+        res = current_cell.check_win(current_player)
+        if res:
+            fill_count += res
+            if current_player == 'X':
+                p1_score += 1
+            else:
+                p2_score += 1
+            if fill_count == ROWS * COLS:
+                game_over = True
+
+        # Switch players
+        if next_turn:
+            turn = (turn + 1) % len(players)
+            current_player = players[turn]
+            next_turn = False
 
     # Display scores and current player
     p1_img = font.render(f'{p1_score}', True, BLUE)
@@ -178,6 +218,12 @@ while running:
         # Display game over message
         over_img = font.render('Game Over', True, WHITE)
         winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, WHITE)
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        overlay.set_alpha(200) 
+        overlay.fill(BLACK)
+        win.blit(overlay, (0, 0))
+        over_img = font.render('Game Over', True,WHITE )
+        winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)
         msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)
         win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))
         win.blit(winner_img, ((SCREEN_WIDTH - winner_img.get_width()) / 2, 150))
