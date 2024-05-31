@@ -153,6 +153,10 @@ git push -u origin <your_branch_name>
 
 Congratulations🎉, you have made a pull request to the Gamer_21. Wait for your submission to be accepted and merged.
 
+## Tech Stacks Used:
+-python 
+-pygame
+
 ## 📜 Credits 
 - This project is based on the classic Dot and Boxes game.
 - Developed using Python only.
