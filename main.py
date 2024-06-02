@@ -1,9 +1,10 @@
 import pygame
+import pygame.mixer
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 300, 300
-CELL_SIZE = 40
-PADDING = 20
+SCREEN_WIDTH, SCREEN_HEIGHT = 500, 500
+CELL_SIZE = 60
+PADDING = 25
 ROWS = COLS = (SCREEN_WIDTH - 4 * PADDING) // CELL_SIZE
 
 # Colors
@@ -20,7 +21,7 @@ pygame.init()
 
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.SysFont('cursive', 25)
-
+button_sound = pygame.mixer.Sound('pick-92276.mp3')
 # Define the Cell class to represent each cell in the grid
 class Cell:
     def __init__(self, row, col):
@@ -80,10 +81,23 @@ pos, current_cell, up, right, bottom, left = reset_cells()
 fill_count, p1_score, p2_score = reset_score()
 turn, players, current_player, next_turn = reset_player()
 
+#Background color animation variables
+color1 = [30, 30, 30]
+color_increment = [1, 1, 1]
+color_change_speed = 2
+
+def animate_background():
+    global color1, color_increment
+    for i in range(3):
+        color1[i] += color_increment[i] * color_change_speed
+        if color1[i] >= 255 or color1[i] <= 0:
+            color_increment[i] *= -1
+
+
 # Main game loop
 running = True
 while running:
-
+    animate_background()
     win.fill(DARK_GRAY)
 
     for event in pygame.event.get():
@@ -105,12 +119,16 @@ while running:
             elif not game_over:
                 if event.key == pygame.K_UP:
                     up = True
+                    button_sound.play()  # Play button press sound
                 elif event.key == pygame.K_RIGHT:
                     right = True
+                    button_sound.play()  # Play button press sound
                 elif event.key == pygame.K_DOWN:
                     bottom = True
+                    button_sound.play()  # Play button press sound
                 elif event.key == pygame.K_LEFT:
                     left = True
+                    button_sound.play()  # Play button press sound
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_UP:
                 up = False
@@ -177,12 +195,12 @@ while running:
             next_turn = False
 
     # Display scores and current player
-    p1_img = font.render(f'{p1_score}', True, BLUE)
-    p2_img = font.render(f'{p2_score}', True, BLUE)
+    p1_img = font.render(f'{p1_score}', True, RED)
+    p2_img = font.render(f'{p2_score}', True, RED)
 
     # Render player texts with appropriate positions    
-    p1_text = font.render('Player 1:', True, BLUE)
-    p2_text = font.render('Player 2:', True, BLUE)
+    p1_text = font.render('Player 1:', True, (0, 255, 0))
+    p2_text = font.render('Player 2:', True, (0, 255, 0))
 
     # Calculate positions for player texts and scores
     p1_text_pos = (2 * PADDING, 15)
@@ -209,7 +227,7 @@ while running:
         overlay.set_alpha(200) 
         overlay.fill(BLACK)
         win.blit(overlay, (0, 0))
-        over_img = font.render('Game Over', True,WHITE )
+        over_img = font.render('Game Over', True,GREEN )
         winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)
         msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)
         win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))
@@ -217,7 +235,7 @@ while running:
         win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, 200))
 
     # Draw border
-    pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
+    pygame.draw.rect(win, RED, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
 
     pygame.display.update()
 
