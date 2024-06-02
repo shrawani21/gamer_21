@@ -21,7 +21,7 @@ pygame.init()
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.SysFont('cursive', 25)
 
-# Define the Cell class to represent each cell in the grid
+
 class Cell:
     def __init__(self, row, col):
         self.row = row
@@ -102,24 +102,6 @@ while running:
                 pos, current_cell, up, right, bottom, left = reset_cells()
                 fill_count, p1_score, p2_score = reset_score()
                 turn, players, current_player, next_turn = reset_player()
-            elif not game_over:
-                if event.key == pygame.K_UP:
-                    up = True
-                elif event.key == pygame.K_RIGHT:
-                    right = True
-                elif event.key == pygame.K_DOWN:
-                    bottom = True
-                elif event.key == pygame.K_LEFT:
-                    left = True
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
-                up = False
-            elif event.key == pygame.K_RIGHT:
-                right = False
-            elif event.key == pygame.K_DOWN:
-                bottom = False
-            elif event.key == pygame.K_LEFT:
-                left = False
 
     # Drawing grid
     for r in range(ROWS + 1):
@@ -132,10 +114,39 @@ while running:
         if pos and cell.rect.collidepoint(pos):
             current_cell = cell
 
-    # Drawing current selection
-    if current_cell:
+    # Determine which cell was clicked and fill all sides if not already filled
+    if current_cell and pos:
         index = current_cell.index
         if not current_cell.winner:
+            sides_filled = 0
+            for i in range(4):
+                if not current_cell.sides[i]:
+                    current_cell.sides[i] = True
+                    sides_filled += 1
+                    if i == 0 and index - ROWS >= 0:
+                        cells[index - ROWS].sides[2] = True
+                    elif i == 1 and (index + 1) % COLS > 0:
+                        cells[index + 1].sides[3] = True
+                    elif i == 2 and index + ROWS < len(cells):
+                        cells[index + ROWS].sides[0] = True
+                    elif i == 3 and (index % COLS) > 0:
+                        cells[index - 1].sides[1] = True
+
+            # Check for win condition
+            res = current_cell.check_win(current_player)
+            if res:
+                fill_count += res
+                if current_player == 'X':
+                    p1_score += 1
+                else:
+                    p2_score += 1
+                if fill_count == ROWS * COLS:
+                    game_over = True
+
+            # Always switch players after a mouse click
+            turn = (turn + 1) % len(players)
+            current_player = players[turn]
+=======
             pygame.draw.circle(win, RED, current_cell.rect.center, 2)
 
         if up and not current_cell.sides[0]:
@@ -205,6 +216,8 @@ while running:
 
     if game_over:
         # Display game over message
+        over_img = font.render('Game Over', True, WHITE)
+        winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, WHITE)
         overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         overlay.set_alpha(200) 
         overlay.fill(BLACK)
