@@ -1,7 +1,7 @@
 import pygame
 
 # Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 300, 300
+SCREEN_WIDTH, SCREEN_HEIGHT = 400, 400
 CELL_SIZE = 40
 PADDING = 20
 ROWS = COLS = (SCREEN_WIDTH - 4 * PADDING) // CELL_SIZE
@@ -73,12 +73,23 @@ def reset_score():
 def reset_player():
     return 0, ['X', 'O'], 'X', False
 
+def draw_button(win, rect, color, text, text_color):
+    pygame.draw.rect(win, color, rect)
+    text_surf = font.render(text, True, text_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    win.blit(text_surf, text_rect)
+
 # Game variables initialization
 game_over = False
 cells = create_cells()
 pos, current_cell, up, right, bottom, left = reset_cells()
 fill_count, p1_score, p2_score = reset_score()
 turn, players, current_player, next_turn = reset_player()
+moves = []  # To store all the moves made during the game
+
+# Replay and Quit buttons
+replay_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2 + 50, 100, 50))
+quit_button_rect = pygame.Rect((SCREEN_WIDTH // 2 - 50, SCREEN_HEIGHT // 2 + 110, 100, 50))
 
 # Main game loop
 running = True
@@ -91,6 +102,15 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = event.pos
+            if game_over and replay_button_rect.collidepoint(pos):
+                game_over = False
+                cells = create_cells()
+                pos, current_cell, up, right, bottom, left = reset_cells()
+                fill_count, p1_score, p2_score = reset_score()
+                turn, players, current_player, next_turn = reset_player()
+                moves = []  # Reset moves for the new game
+            elif game_over and quit_button_rect.collidepoint(pos):
+                running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             pos = None
         elif event.type == pygame.KEYDOWN:
@@ -102,6 +122,7 @@ while running:
                 pos, current_cell, up, right, bottom, left = reset_cells()
                 fill_count, p1_score, p2_score = reset_score()
                 turn, players, current_player, next_turn = reset_player()
+                moves = []  # Reset moves for the new game
             elif not game_over:
                 if event.key == pygame.K_UP:
                     up = True
@@ -143,21 +164,25 @@ while running:
             if index - ROWS >= 0:
                 cells[index - ROWS].sides[2] = True
                 next_turn = True
+            moves.append((index, 0))  # Log the move
         if right and not current_cell.sides[1]:
             current_cell.sides[1] = True
             if (index + 1) % COLS > 0:
                 cells[index + 1].sides[3] = True
                 next_turn = True
+            moves.append((index, 1))  # Log the move
         if bottom and not current_cell.sides[2]:
             current_cell.sides[2] = True
             if index + ROWS < len(cells):
                 cells[index + ROWS].sides[0] = True
                 next_turn = True
+            moves.append((index, 2))  # Log the move
         if left and not current_cell.sides[3]:
             current_cell.sides[3] = True
             if (index % COLS) > 0:
                 cells[index - 1].sides[1] = True
                 next_turn = True
+            moves.append((index, 3))  # Log the move
 
         # Check for win condition
         res = current_cell.check_win(current_player)
@@ -209,12 +234,16 @@ while running:
         overlay.set_alpha(200) 
         overlay.fill(BLACK)
         win.blit(overlay, (0, 0))
-        over_img = font.render('Game Over', True,WHITE )
+        over_img = font.render('Game Over', True, WHITE)
         winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)
-        msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)
+        #msg_img = font.render('Press R to restart', True, RED)
         win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))
         win.blit(winner_img, ((SCREEN_WIDTH - winner_img.get_width()) / 2, 150))
-        win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, 200))
+        #win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, 200))
+        
+        # Draw replay and quit buttons
+        draw_button(win, replay_button_rect, BLUE, 'Replay', WHITE)
+        draw_button(win, quit_button_rect, RED, 'Quit', WHITE)
 
     # Draw border
     pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
