@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 # Constants
 SCREEN_WIDTH, SCREEN_HEIGHT = 300, 300
@@ -15,11 +16,19 @@ BLACK = (12, 12, 12)
 DARK_GRAY = (30, 30, 30)
 LIGHT_GRAY = (100, 100, 100)
 
+
 # Initialize Pygame
 pygame.init()
 
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Pygame Game with Replay and Quit")
+
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 font = pygame.font.SysFont('cursive', 25)
+
+#buttons
+button_width = 200
+button_height = 50
 
 # Define the Cell class to represent each cell in the grid
 class Cell:
@@ -219,6 +228,53 @@ while running:
     # Draw border
     pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)
 
+def draw_button(text, color, x, y, action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x + button_width > mouse[0] > x and y + button_height > mouse[1] > y:
+        pygame.draw.rect(screen, color, (x, y, button_width, button_height))
+        if click[0] == 1 and action:
+            action()
+    else:
+        pygame.draw.rect(screen, color, (x, y, button_width, button_height))
+
+    text_surf = font.render(text, True, WHITE)
+    text_rect = text_surf.get_rect(center=(x + button_width / 2, y + button_height / 2))
+    screen.blit(text_surf, text_rect)
+
+def replay_game():
+    main()
+
+def quit_game():
+    pygame.quit()
+    sys.exit()
+
+def main():
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        screen.fill(WHITE)
+
+        # Game logic and drawing go here
+
+        # Draw buttons
+        draw_button("Replay", BLUE, SCREEN_WIDTH // 4 - button_width // 2, SCREEN_HEIGHT // 2, replay_game)
+        draw_button("Quit", RED, 3 * SCREEN_WIDTH // 4 - button_width // 2, SCREEN_HEIGHT // 2, quit_game)
+
+
     pygame.display.update()
 
 pygame.quit()
+
+pygame.display.flip()
+        clock.tick(60)
+
+if __name__ == "__main__":
+    main()
