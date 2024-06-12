@@ -1,10 +1,17 @@
-const specs = {
-    project: {
-      name: "Dot and Boxes",
-      defaultBranch: "main",
-      repoUrl: "https://github.com/shrawani21/gamer_21.git",
-    },
-    contributing: {
-      generate: true
-    }
+const projectDetails = {
+  project: {
+    name: "Dots and Boxes",
+    defaultBranch: "main",
+    repositoryUrl: "https://github.com/shrawani21/gamer_21.git",
+  },
+  contributing: {
+    generate: true,
+    guidelinesUrl: "https://github.com/shrawani21/gamer_21/blob/main/CONTRIBUTING.md", // Added example guidelines URL
+    codeOfConductUrl: "https://github.com/shrawani21/gamer_21/blob/main/CODE_OF_CONDUCT.md" // Added example code of conduct URL
+  },
+  documentation: {
+    readmeUrl: "https://github.com/shrawani21/gamer_21/blob/main/README.md", // Added README URL
+    issuesUrl: "https://github.com/shrawani21/gamer_21/issues", // Added issues URL for reporting bugs or features
+    pullRequestsUrl: "https://github.com/shrawani21/gamer_21/pulls" // Added pull requests URL for contributing
+  }
 };
