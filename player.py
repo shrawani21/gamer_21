@@ -1,3 +1,4 @@
+import pygame
 import random
 from typing import List, Dict, Optional
 from box import Box
