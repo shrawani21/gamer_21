@@ -33,11 +33,12 @@ class Box:
 
     @top.setter
     def top(self, top: str):
-        self._top = top
-        self.sides += 1
-        if self.sides == 4:
-            self.color = top
-            Box.BOXES_DONE += 1
+        if self._top is None:
+            self._top = top
+            self.sides += 1
+            if self.sides == 4:
+                self.color = top
+                Box.BOXES_DONE += 1
 
     @property
     def bottom(self) -> Optional[str]:
@@ -45,11 +46,12 @@ class Box:
 
     @bottom.setter
     def bottom(self, bottom: str):
-        self._bottom = bottom
-        self.sides += 1
-        if self.sides == 4:
-            self.color = bottom
-            Box.BOXES_DONE += 1
+        if self._bottom is None:
+            self._bottom = bottom
+            self.sides += 1
+            if self.sides == 4:
+                self.color = bottom
+                Box.BOXES_DONE += 1
 
     @property
     def left(self) -> Optional[str]:
@@ -57,11 +59,12 @@ class Box:
 
     @left.setter
     def left(self, left: str):
-        self._left = left
-        self.sides += 1
-        if self.sides == 4:
-            self.color = left
-            Box.BOXES_DONE += 1
+        if self._left is None:
+            self._left = left
+            self.sides += 1
+            if self.sides == 4:
+                self.color = left
+                Box.BOXES_DONE += 1
 
     @property
     def right(self) -> Optional[str]:
@@ -69,8 +72,17 @@ class Box:
 
     @right.setter
     def right(self, right: str):
-        self._right = right
-        self.sides += 1
-        if self.sides == 4:
-            self.color = right
-            Box.BOXES_DONE += 1
+        if self._right is None:
+            self._right = right
+            self.sides += 1
+            if self.sides == 4:
+                self.color = right
+                Box.BOXES_DONE += 1
+                
+    def reset(self):
+        self._top = None
+        self._bottom = None
+        self._left = None
+        self._right = None
+        self.sides = 0
+        self.color = None
