@@ -274,7 +274,7 @@ def main():
 pygame.quit()
 
 pygame.display.flip()
-        clock.tick(60)
+clock.tick(60)
 
 if __name__ == "__main__":
     main()
