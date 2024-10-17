@@ -1,0 +1,303 @@
+[1mdiff --git a/main.py b/main.py[m
+[1mindex b9da115..1e24888 100644[m
+[1m--- a/main.py[m
+[1m+++ b/main.py[m
+[36m@@ -1,13 +1,11 @@[m
+ import pygame[m
+ import sys[m
+ [m
+[31m-# Constants[m
+ SCREEN_WIDTH, SCREEN_HEIGHT = 300, 300[m
+ CELL_SIZE = 40[m
+ PADDING = 20[m
+ ROWS = COLS = (SCREEN_WIDTH - 4 * PADDING) // CELL_SIZE[m
+ [m
+[31m-# Colors[m
+ WHITE = (255, 255, 255)[m
+ RED = (252, 91, 122)[m
+ BLUE = (78, 193, 246)[m
+[36m@@ -17,20 +15,17 @@[m [mDARK_GRAY = (30, 30, 30)[m
+ LIGHT_GRAY = (100, 100, 100)[m
+ [m
+ [m
+[31m-# Initialize Pygame[m
+ pygame.init()[m
+ [m
+ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))[m
+ pygame.display.set_caption("Pygame Game with Replay and Quit")[m
+ [m
+[31m-win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))[m
+ font = pygame.font.SysFont('cursive', 25)[m
+ [m
+[31m-#buttons[m
+[32m+[m[32m# buttons[m
+ button_width = 200[m
+ button_height = 50[m
+ [m
+[31m-# Define the Cell class to represent each cell in the grid[m
+ class Cell:[m
+     def __init__(self, row, col):[m
+         self.row = row[m
+[36m@@ -73,208 +68,88 @@[m [mdef create_cells():[m
+             cells.append(cell)[m
+     return cells[m
+ [m
+[31m-def reset_cells():[m
+[31m-    return None, None, False, False, False, False[m
+[31m-[m
+[31m-def reset_score():[m
+[31m-    return 0, 0, 0[m
+[31m-[m
+[31m-def reset_player():[m
+[31m-    return 0, ['X', 'O'], 'X', False[m
+[31m-[m
+[31m-# Game variables initialization[m
+[31m-game_over = False[m
+[31m-cells = create_cells()[m
+[31m-pos, current_cell, up, right, bottom, left = reset_cells()[m
+[31m-fill_count, p1_score, p2_score = reset_score()[m
+[31m-turn, players, current_player, next_turn = reset_player()[m
+[31m-[m
+[31m-# Main game loop[m
+[31m-running = True[m
+[31m-while running:[m
+[31m-[m
+[31m-    win.fill(DARK_GRAY)[m
+[31m-[m
+[31m-    for event in pygame.event.get():[m
+[31m-        if event.type == pygame.QUIT:[m
+[31m-            running = False[m
+[31m-        elif event.type == pygame.MOUSEBUTTONDOWN:[m
+[31m-            pos = event.pos[m
+[31m-        elif event.type == pygame.MOUSEBUTTONUP:[m
+[31m-            pos = None[m
+[31m-        elif event.type == pygame.KEYDOWN:[m
+[31m-            if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:[m
+[31m-                running = False[m
+[31m-            elif event.key == pygame.K_r:[m
+[31m-                game_over = False[m
+[31m-                cells = create_cells()[m
+[31m-                pos, current_cell, up, right, bottom, left = reset_cells()[m
+[31m-                fill_count, p1_score, p2_score = reset_score()[m
+[31m-                turn, players, current_player, next_turn = reset_player()[m
+[31m-            elif not game_over:[m
+[31m-                if event.key == pygame.K_UP:[m
+[31m-                    up = True[m
+[31m-                elif event.key == pygame.K_RIGHT:[m
+[31m-                    right = True[m
+[31m-                elif event.key == pygame.K_DOWN:[m
+[31m-                    bottom = True[m
+[31m-                elif event.key == pygame.K_LEFT:[m
+[31m-                    left = True[m
+[31m-        elif event.type == pygame.KEYUP:[m
+[31m-            if event.key == pygame.K_UP:[m
+[31m-                up = False[m
+[31m-            elif event.key == pygame.K_RIGHT:[m
+[31m-                right = False[m
+[31m-            elif event.key == pygame.K_DOWN:[m
+[31m-                bottom = False[m
+[31m-            elif event.key == pygame.K_LEFT:[m
+[31m-                left = False[m
+[31m-[m
+[31m-    # Drawing grid[m
+[31m-    for r in range(ROWS + 1):[m
+[31m-        for c in range(COLS + 1):[m
+[31m-            pygame.draw.circle(win, WHITE, (c * CELL_SIZE + 2 * PADDING, r * CELL_SIZE + 3 * PADDING), 2)[m
+[31m-[m
+[31m-    # Update and draw cells[m
+[31m-    for cell in cells:[m
+[31m-        cell.update(win)[m
+[31m-        if pos and cell.rect.collidepoint(pos):[m
+[31m-            current_cell = cell[m
+[31m-[m
+[31m-    # Drawing current selection[m
+[31m-    if current_cell:[m
+[31m-        index = current_cell.index[m
+[31m-        if not current_cell.winner:[m
+[31m-            pygame.draw.circle(win, RED, current_cell.rect.center, 2)[m
+[31m-[m
+[31m-        if up and not current_cell.sides[0]:[m
+[31m-            current_cell.sides[0] = True[m
+[31m-            if index - ROWS >= 0:[m
+[31m-                cells[index - ROWS].sides[2] = True[m
+[31m-                next_turn = True[m
+[31m-        if right and not current_cell.sides[1]:[m
+[31m-            current_cell.sides[1] = True[m
+[31m-            if (index + 1) % COLS > 0:[m
+[31m-                cells[index + 1].sides[3] = True[m
+[31m-                next_turn = True[m
+[31m-        if bottom and not current_cell.sides[2]:[m
+[31m-            current_cell.sides[2] = True[m
+[31m-            if index + ROWS < len(cells):[m
+[31m-                cells[index + ROWS].sides[0] = True[m
+[31m-                next_turn = True[m
+[31m-        if left and not current_cell.sides[3]:[m
+[31m-            current_cell.sides[3] = True[m
+[31m-            if (index % COLS) > 0:[m
+[31m-                cells[index - 1].sides[1] = True[m
+[31m-                next_turn = True[m
+[31m-[m
+[31m-        # Check for win condition[m
+[31m-        res = current_cell.check_win(current_player)[m
+[31m-        if res:[m
+[31m-            fill_count += res[m
+[31m-            if current_player == 'X':[m
+[31m-                p1_score += 1[m
+[31m-            else:[m
+[31m-                p2_score += 1[m
+[31m-            if fill_count == ROWS * COLS:[m
+[31m-                game_over = True[m
+[31m-[m
+[31m-        # Switch players[m
+[31m-        if next_turn:[m
+[31m-            turn = (turn + 1) % len(players)[m
+[31m-            current_player = players[turn][m
+[31m-            next_turn = False[m
+[31m-[m
+[31m-    # Display scores and current player[m
+[31m-    p1_img = font.render(f'{p1_score}', True, BLUE)[m
+[31m-    p2_img = font.render(f'{p2_score}', True, BLUE)[m
+[31m-[m
+[31m-    # Render player texts with appropriate positions    [m
+[31m-    p1_text = font.render('Player 1:', True, BLUE)[m
+[31m-    p2_text = font.render('Player 2:', True, BLUE)[m
+[31m-[m
+[31m-    # Calculate positions for player texts and scores[m
+[31m-    p1_text_pos = (2 * PADDING, 15)[m
+[31m-    p1_img_pos = (p1_text_pos[0] + p1_text.get_width() + 5, 15)[m
+[31m-    p2_img_pos = (SCREEN_WIDTH - 2 * PADDING - p2_img.get_width(), 15)[m
+[31m-    p2_text_pos = (p2_img_pos[0] - p2_text.get_width() - 5, 15)[m
+[31m-[m
+[31m-    # Blit the player texts and scores[m
+[31m-    win.blit(p1_text, p1_text_pos)[m
+[31m-    win.blit(p1_img, p1_img_pos)[m
+[31m-    win.blit(p2_text, p2_text_pos)[m
+[31m-    win.blit(p2_img, p2_img_pos)[m
+[31m-[m
+[31m-    # Highlight current player's turn[m
+[31m-    if not game_over:[m
+[31m-        if turn == 0:  # Player 1's turn[m
+[31m-            pygame.draw.rect(win, BLUE, (p1_text_pos[0], p1_text_pos[1] + font.get_height() + 2, p1_text.get_width() + p1_img.get_width() + 5, 2), 0)[m
+[31m-        else:  # Player 2's turn[m
+[31m-            pygame.draw.rect(win, BLUE, (p2_text_pos[0], p2_text_pos[1] + font.get_height() + 2, p2_text.get_width() + p2_img.get_width() + 5, 2), 0)[m
+[31m-[m
+[31m-    if game_over:[m
+[31m-        # Display game over message[m
+[31m-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))[m
+[31m-        overlay.set_alpha(200) [m
+[31m-        overlay.fill(BLACK)[m
+[31m-        win.blit(overlay, (0, 0))[m
+[31m-        over_img = font.render('Game Over', True,WHITE )[m
+[31m-        winner_img = font.render(f'Player {1 if p1_score > p2_score else 2} Won', True, GREEN)[m
+[31m-        msg_img = font.render('Press R to restart, Q or ESC to quit', True, RED)[m
+[31m-        win.blit(over_img, ((SCREEN_WIDTH - over_img.get_width()) / 2, 100))[m
+[31m-        win.blit(winner_img, ((SCREEN_WIDTH - winner_img.get_width()) / 2, 150))[m
+[31m-        win.blit(msg_img, ((SCREEN_WIDTH - msg_img.get_width()) / 2, 200))[m
+[31m-[m
+[31m-    # Draw border[m
+[31m-    pygame.draw.rect(win, LIGHT_GRAY, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 2, border_radius=10)[m
+[32m+[m[32mdef reset_game():[m
+[32m+[m[41m    [m
+[32m+[m[32m    return create_cells(), 0, 0, 0, ['X', 'O'], 'X', False, False[m
+ [m
+ def draw_button(text, color, x, y, action=None):[m
+     mouse = pygame.mouse.get_pos()[m
+     click = pygame.mouse.get_pressed()[m
+ [m
+[31m-    if x + button_width > mouse[0] > x and y + button_height > mouse[1] > y:[m
+[31m-        pygame.draw.rect(screen, color, (x, y, button_width, button_height))[m
+[31m-        if click[0] == 1 and action:[m
+[31m-            action()[m
+[31m-    else:[m
+[31m-        pygame.draw.rect(screen, color, (x, y, button_width, button_height))[m
+[32m+[m[32m    pygame.draw.rect(screen, color, (x, y, button_width, button_height))[m
+[32m+[m[32m    if x + button_width > mouse[0] > x and y + button_height > mouse[1] > y and click[0] == 1 and action:[m
+[32m+[m[32m        action()[m
+ [m
+     text_surf = font.render(text, True, WHITE)[m
+     text_rect = text_surf.get_rect(center=(x + button_width / 2, y + button_height / 2))[m
+     screen.blit(text_surf, text_rect)[m
+ [m
+ def replay_game():[m
+[31m-    main()[m
+[32m+[m[32m    global cells, fill_count, p1_score, p2_score, players, current_player, game_over, next_turn[m
+[32m+[m[32m    cells, fill_count, p1_score, p2_score, players, current_player, game_over, next_turn = reset_game()[m
+ [m
+ def quit_game():[m
+     pygame.quit()[m
+     sys.exit()[m
+ [m
+ def main():[m
+[32m+[m[32m    global cells, fill_count, p1_score, p2_score, players, current_player, game_over, next_turn[m
+[32m+[m
+     clock = pygame.time.Clock()[m
+[32m+[m[32m    cells, fill_count, p1_score, p2_score, players, current_player, game_over, next_turn = reset_game()[m
+[32m+[m
+     running = True[m
+[32m+[m[32m    pos, current_cell = None, None[m
+[32m+[m[32m    up, right, bottom, left = False, False, False, False[m
+ [m
+     while running:[m
+         for event in pygame.event.get():[m
+             if event.type == pygame.QUIT:[m
+[31m-                pygame.quit()[m
+[31m-                sys.exit()[m
+[32m+[m[32m                running = False[m
+[32m+[m[32m            elif event.type == pygame.MOUSEBUTTONDOWN:[m
+[32m+[m[32m                pos = event.pos[m
+[32m+[m[32m            elif event.type == pygame.MOUSEBUTTONUP:[m
+[32m+[m[32m                pos = None[m
+[32m+[m[32m            elif event.type == pygame.KEYDOWN:[m
+[32m+[m[32m                if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:[m
+[32m+[m[32m                    running = False[m
+[32m+[m[32m                elif event.key == pygame.K_r:[m
+[32m+[m[32m                    replay_game()[m
+[32m+[m[32m                elif not game_over:[m
+[32m+[m[32m                    if event.key == pygame.K_UP:[m
+[32m+[m[32m                        up = True[m
+[32m+[m[32m                    elif event.key == pygame.K_RIGHT:[m
+[32m+[m[32m                        right = True[m
+[32m+[m[32m                    elif event.key == pygame.K_DOWN:[m
+[32m+[m[32m                        bottom = True[m
+[32m+[m[32m                    elif event.key == pygame.K_LEFT:[m
+[32m+[m[32m                        left = True[m
+[32m+[m[32m            elif event.type == pygame.KEYUP:[m
+[32m+[m[32m                if event.key == pygame.K_UP:[m
+[32m+[m[32m                    up = False[m
+[32m+[m[32m                elif event.key == pygame.K_RIGHT:[m
+[32m+[m[32m                    right = False[m
+[32m+[m[32m                elif event.key == pygame.K_DOWN:[m
+[32m+[m[32m                    bottom = False[m
+[32m+[m[32m                elif event.key == pygame.K_LEFT:[m
+[32m+[m[32m                    left = False[m
+[32m+[m
+[32m+[m[32m        screen.fill(DARK_GRAY)[m
+ [m
+[31m-        screen.fill(WHITE)[m
+[32m+[m[32m        for r in range(ROWS + 1):[m
+[32m+[m[32m            for c in range(COLS + 1):[m
+[32m+[m[32m                pygame.draw.circle(screen, WHITE, (c * CELL_SIZE + 2 * PADDING, r * CELL_SIZE + 3 * PADDING), 2)[m
+ [m
+[31m-        # Game logic and drawing go here[m
+[32m+[m[32m        for cell in cells:[m
+[32m+[m[32m            cell.update(screen)[m
+[32m+[m[32m            if pos and cell.rect.collidepoint(pos):[m
+[32m+[m[32m                current_cell = cell[m
+ [m
+[31m-        # Draw buttons[m
+         draw_button("Replay", BLUE, SCREEN_WIDTH // 4 - button_width // 2, SCREEN_HEIGHT // 2, replay_game)[m
+         draw_button("Quit", RED, 3 * SCREEN_WIDTH // 4 - button_width // 2, SCREEN_HEIGHT // 2, quit_game)[m
+ [m
+[31m-[m
+[31m-    pygame.display.update()[m
+[31m-[m
+[31m-pygame.quit()[m
+[31m-[m
+[31m-pygame.display.flip()[m
+[32m+[m[32m        pygame.display.update()[m
+         clock.tick(60)[m
+ [m
+ if __name__ == "__main__":[m
+[31m-    main()[m
+\ No newline at end of file[m
+[32m+[m[32m    main()[m
