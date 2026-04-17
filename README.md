@@ -19,7 +19,7 @@ Dot and Boxes is a classic pen-and-paper game where two players take turns conne
 - **Score Tracking:** Keep track of each player's score throughout the game.
 <br>
 
-
+- Interactive GUI using Pygame.
 ## 🎲 Instructions for Playing
 1. Player 1 is represented by 'X' and Player 2 is represented by 'O'.
 
@@ -153,14 +153,18 @@ git push -u origin <your_branch_name>
 
 Congratulations🎉, you have made a pull request to the Gamer_21. Wait for your submission to be accepted and merged.
 
-## Tech Stacks Used:
--python 
--pygame
+## 🛠️ Tech Stack
+- Python
+- Pygame (for GUI and game development)
 
 ## 📜 Credits 
 - This project is based on the classic Dot and Boxes game.
-- Developed using Python only.
+- - Developed using Python and Pygame.
 
 
 ## 📄 License 
 - This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## 📦 Requirements
+- Python 3.x
+- pygame
